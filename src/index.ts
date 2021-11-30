@@ -1,11 +1,11 @@
-import { 删除数组最后一个 } from './lib/删除数组最后一个'
-import { 去除单层数组 } from './lib/去除单层数组'
-import { 取数组最后一个 } from './lib/取数组最后一个'
-import { 后继数 } from './lib/后继数'
-import { 基础类型等价判定 } from './lib/基础类型等价判定'
-import { 字符串转数字 } from './lib/字符串转数字'
-import { 数字转字符串 } from './lib/数字转字符串'
-import { 递归替换层叠数组 } from './lib/递归替换层叠数组'
+import { 删除数组最后一个 } from '@lsby/ts_type_fun/src/删除数组最后一个'
+import { 去除单层数组 } from '@lsby/ts_type_fun/src/去除单层数组'
+import { 取数组最后一个 } from '@lsby/ts_type_fun/src/取数组最后一个'
+import { 后继数 } from '@lsby/ts_type_fun/src/后继数'
+import { 基础类型等价判定 } from '@lsby/ts_type_fun/src/基础类型等价判定'
+import { 字符串转数字 } from '@lsby/ts_type_fun/src/字符串转数字'
+import { 数字转字符串 } from '@lsby/ts_type_fun/src/数字转字符串'
+import { 递归替换层叠数组 } from '@lsby/ts_type_fun/src/递归替换层叠数组'
 
 export interface Lambda项<泛型 extends string[], 实体 extends any[]> {
     泛型: 泛型
