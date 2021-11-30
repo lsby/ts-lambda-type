@@ -5,7 +5,11 @@ import { 后继数 } from '@lsby/ts_type_fun/src/后继数'
 import { 基础类型等价判定 } from '@lsby/ts_type_fun/src/基础类型等价判定'
 import { 字符串转数字 } from '@lsby/ts_type_fun/src/字符串转数字'
 import { 数字转字符串 } from '@lsby/ts_type_fun/src/数字转字符串'
+import { 数组长度判定 } from '@lsby/ts_type_fun/src/数组长度判定'
 import { 递归替换层叠数组 } from '@lsby/ts_type_fun/src/递归替换层叠数组'
+import { 或 } from '@lsby/ts_type_fun/src/或'
+import { 非 } from '@lsby/ts_type_fun/src/非'
+import { 数组化 } from './lib/数组化'
 
 export interface Lambda项<泛型 extends string[], 实体 extends any[]> {
     泛型: 泛型
@@ -37,25 +41,32 @@ export type Alpha变换<
         : Alpha变换<值, 旧名称, 新名称, 字符串转数字<后继数<数字转字符串<当前位置>>>>
     : never
 
+export type 应用<
+    // 前键 extends Lambda项<string[], any[]>,
+    // 后键 extends Lambda项<string[], any[]>
+    前键,
+    后键,
+> = 规格化Lambda项<前键, 'a_'> extends Lambda项<infer 泛型1, infer 实体1>
+    ? 规格化Lambda项<后键, 'b_'> extends Lambda项<infer 泛型2, infer 实体2>
+        ? Lambda项<[...泛型1, ...泛型2], [去除单层数组<实体1>, 去除单层数组<实体2>]>
+        : 2
+    : 3
+
 export type Beta规约<
-    // 被调用值 extends Lambda项<string[], any[]>,
-    // 调用值 extends Lambda项<string[], any[]>,
-    被调用值,
-    调用值,
-> = 被调用值 extends Lambda项<string[], any[]>
-    ? 调用值 extends Lambda项<string[], any[]>
-        ? 规格化Lambda项<被调用值, 'a_'> extends Lambda项<infer 泛型1, infer 实体1>
-            ? 规格化Lambda项<调用值, 'b_'> extends Lambda项<infer 泛型2, infer 实体2>
-                ? 泛型1 extends [infer 当前值, ...infer 余下]
-                    ? 当前值 extends string
-                        ? 余下 extends string[]
-                            ? Lambda项<[...余下, ...泛型2], 递归替换层叠数组<实体1, 当前值, 去除单层数组<实体2>>>
-                            : never
-                        : never
-                    : never
-                : never
-            : never
-        : never
+    // 值 extends Lambda项<string[], any[]>,
+    值,
+> = 值 extends Lambda项<infer 泛型, infer 实体>
+    ? 或<数组长度判定<泛型, 0>, 非<数组长度判定<实体, 2>>> extends true
+        ? never
+        : 实体 extends [infer 前键, infer 后键]
+        ? 泛型 extends [infer 当前泛型, ...infer 余下]
+            ? 余下 extends string[]
+                ? 当前泛型 extends string
+                    ? Lambda项<余下, 递归替换层叠数组<数组化<前键>, 当前泛型, 去除单层数组<数组化<后键>>>>
+                    : 值
+                : 值
+            : 值
+        : 值
     : never
 
 export type Eta变换<

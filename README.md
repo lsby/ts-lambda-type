@@ -158,7 +158,7 @@ type x = G<F>
 
 ```typescript
 type F = Lambda项<['a'], ['a']>
-type G<A> = Beta规约<A, Lambda项<[], ['1']>>
+type G<A> = Beta规约<应用<A, Lambda项<[], ['1']>>>
 type x = 转换为原生类型<G<F>> // 类型 x 是 '1'
 ```
 
