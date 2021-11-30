@@ -1,15 +1,17 @@
-import { 删除数组最后一个 } from '@lsby/ts_type_fun/src/删除数组最后一个'
-import { 去除单层数组 } from '@lsby/ts_type_fun/src/去除单层数组'
-import { 取数组最后一个 } from '@lsby/ts_type_fun/src/取数组最后一个'
-import { 后继数 } from '@lsby/ts_type_fun/src/后继数'
-import { 基础类型等价判定 } from '@lsby/ts_type_fun/src/基础类型等价判定'
-import { 字符串转数字 } from '@lsby/ts_type_fun/src/字符串转数字'
-import { 数字转字符串 } from '@lsby/ts_type_fun/src/数字转字符串'
-import { 数组长度判定 } from '@lsby/ts_type_fun/src/数组长度判定'
-import { 递归替换层叠数组 } from '@lsby/ts_type_fun/src/递归替换层叠数组'
-import { 或 } from '@lsby/ts_type_fun/src/或'
-import { 非 } from '@lsby/ts_type_fun/src/非'
-import { 数组化 } from './lib/数组化'
+import {
+    删除数组最后一个,
+    去除单层数组,
+    取数组最后一个,
+    后继数,
+    基础类型等价判定,
+    字符串转数字,
+    或,
+    数字转字符串,
+    数组长度判定,
+    递归替换层叠数组,
+    非,
+    包装非数组,
+} from '@lsby/ts_type_fun'
 
 export interface Lambda项<泛型 extends string[], 实体 extends any[]> {
     泛型: 泛型
@@ -62,7 +64,7 @@ export type Beta规约<
         ? 泛型 extends [infer 当前泛型, ...infer 余下]
             ? 余下 extends string[]
                 ? 当前泛型 extends string
-                    ? Lambda项<余下, 递归替换层叠数组<数组化<前键>, 当前泛型, 去除单层数组<数组化<后键>>>>
+                    ? Lambda项<余下, 递归替换层叠数组<包装非数组<前键>, 当前泛型, 去除单层数组<包装非数组<后键>>>>
                     : 值
                 : 值
             : 值
