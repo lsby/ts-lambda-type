@@ -12,8 +12,8 @@ import {
     非,
     包装非数组,
     与,
+    判定双层数组,
 } from '@lsby/ts_type_fun'
-import { 判定双层数组 } from './lib/判定双层数组'
 
 export type Lambda项<泛型 extends string[], 实体 extends any[]> = 与<
     非<数组长度判定<实体, 1>>,

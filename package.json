@@ -1,6 +1,6 @@
 {
     "name": "@lsby/ts_lambda_type",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "description": "",
     "scripts": {
         "clean": "gulp 清理一切",
@@ -14,7 +14,7 @@
         "typescript": "^4.5.2"
     },
     "dependencies": {
-        "@lsby/ts_type_fun": "0.0.3"
+        "@lsby/ts_type_fun": "0.0.4"
     },
     "directories": {
         "test": "test"
