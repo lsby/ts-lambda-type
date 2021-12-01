@@ -11,12 +11,18 @@ import {
     递归替换层叠数组,
     非,
     包装非数组,
+    与,
 } from '@lsby/ts_type_fun'
+import { 判定双层数组 } from './lib/判定双层数组'
 
-export interface Lambda项<泛型 extends string[], 实体 extends any[]> {
-    泛型: 泛型
-    实体: 实体
-}
+export type Lambda项<泛型 extends string[], 实体 extends any[]> = 与<
+    非<数组长度判定<实体, 1>>,
+    非<数组长度判定<实体, 2>>
+> extends true
+    ? never
+    : 判定双层数组<实体> extends true
+    ? Lambda项<泛型, 去除单层数组<实体>>
+    : { 泛型: 泛型; 实体: 实体 }
 
 export type 规格化Lambda项<
     // 值 extends Lambda项<string[], any[]>,
