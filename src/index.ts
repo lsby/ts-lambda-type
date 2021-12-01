@@ -24,19 +24,16 @@ export type Lambda项<泛型 extends string[], 实体 extends any[]> = 与<
     ? Lambda项<泛型, 去除单层数组<实体>>
     : { 泛型: 泛型; 实体: 实体 }
 
-export type 规格化Lambda项<
-    // 值 extends Lambda项<string[], any[]>,
-    值,
-    前缀 extends string,
-    当前位置 extends number = 0,
-> = 值 extends Lambda项<infer 泛型, infer 实体>
+export type 规格化Lambda项<值, 前缀 extends string, 当前位置 extends number = 0> = 值 extends Lambda项<
+    infer 泛型,
+    infer 实体
+>
     ? 泛型['length'] extends 当前位置
         ? 值
         : 规格化Lambda项<Alpha变换<值, 泛型[当前位置], `${前缀}${当前位置}`>, 前缀, 字符串转数字<后继数<当前位置>>>
     : never
 
 export type Alpha变换<
-    // 值 extends Lambda项<string[], any[]>,
     值,
     旧名称 extends string,
     新名称 extends string,
@@ -49,12 +46,7 @@ export type Alpha变换<
         : Alpha变换<值, 旧名称, 新名称, 字符串转数字<后继数<数字转字符串<当前位置>>>>
     : never
 
-export type 应用<
-    // 前键 extends Lambda项<string[], any[]>,
-    // 后键 extends Lambda项<string[], any[]>
-    前键,
-    后键,
-> = 规格化Lambda项<前键, 'a_'> extends Lambda项<infer 泛型1, infer 实体1>
+export type 应用<前键, 后键> = 规格化Lambda项<前键, 'a_'> extends Lambda项<infer 泛型1, infer 实体1>
     ? 规格化Lambda项<后键, 'b_'> extends Lambda项<infer 泛型2, infer 实体2>
         ? Lambda项<[...泛型1, ...泛型2], [去除单层数组<实体1>, 去除单层数组<实体2>]>
         : 2
@@ -67,10 +59,7 @@ export type 应用<
 //         应用<应用<Lambda项<['a', 'b'], [['Either', 'a'], 'b']>, Lambda项<[], ['String']>>, Lambda项<[], ['Number']>>
 //     >
 // >
-export type Beta规约<
-    // 值 extends Lambda项<string[], any[]>,
-    值,
-> = 值 extends Lambda项<infer 泛型, infer 实体>
+export type Beta规约<值> = 值 extends Lambda项<infer 泛型, infer 实体>
     ? 或<数组长度判定<泛型, 0>, 非<数组长度判定<实体, 2>>> extends true
         ? never
         : 实体 extends [infer 前键, infer 后键]
@@ -84,10 +73,7 @@ export type Beta规约<
         : 值
     : never
 
-export type Eta变换<
-    // 值 extends Lambda项<string[], any[]>,
-    值,
-> = 值 extends Lambda项<infer 泛型, infer 实体>
+export type Eta变换<值> = 值 extends Lambda项<infer 泛型, infer 实体>
     ? 泛型 extends []
         ? 值
         : [取数组最后一个<泛型>, 取数组最后一个<实体>] extends [infer 最后泛型, infer 最后实体]
@@ -97,10 +83,7 @@ export type Eta变换<
         : 值
     : never
 
-export type 转换为原生类型<
-    // 值 extends Lambda项<string[], any[]>,
-    值,
-> = 值 extends Lambda项<infer 泛型, infer 实体>
+export type 转换为原生类型<值> = 值 extends Lambda项<infer 泛型, infer 实体>
     ? 泛型 extends []
         ? 实体 extends [infer a]
             ? a
