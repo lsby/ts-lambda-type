@@ -60,6 +60,13 @@ export type 应用<
         : 2
     : 3
 
+// todo 计算应该从里向外 而不是从外向里
+// 下面这个计算应该是 [["Either", "String"], "Number"] 而不是 [["Either", "Number"], "String"]
+// type aaa = Beta规约<
+//     Beta规约<
+//         应用<应用<Lambda项<['a', 'b'], [['Either', 'a'], 'b']>, Lambda项<[], ['String']>>, Lambda项<[], ['Number']>>
+//     >
+// >
 export type Beta规约<
     // 值 extends Lambda项<string[], any[]>,
     值,
