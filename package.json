@@ -1,6 +1,6 @@
 {
     "name": "@lsby/ts_lambda_type",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "",
     "scripts": {
         "clean": "gulp 清理一切",
@@ -28,6 +28,6 @@
         "url": "https://github.com/lsby/ts_lambda_type/issues"
     },
     "homepage": "https://github.com/lsby/ts_lambda_type#readme",
-    "main": "index.js",
+    "main": "src/index.ts",
     "keywords": []
 }
