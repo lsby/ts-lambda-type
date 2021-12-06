@@ -1,6 +1,6 @@
 {
     "name": "@lsby/ts_lambda_type",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "",
     "scripts": {
         "clean": "gulp 清理一切",
