@@ -38,7 +38,7 @@ export type Alpha变换<值 extends Lambda项, W extends string> = 值 extends [
         ? 'W不可以是E中的自由变量.'
         : 数组存在元素<计算自由变量<替换<E, V, W>>, W> extends true
         ? ['λ', W, 替换<E, V, [W]>]
-        : 'E[V:=W]后, W被E绑定.'
+        : 'E[V:=W]后, W不可以被E绑定.'
     : '只有λV.E形式的Lambda项能进行Alpha变换.'
 
 var 测试_Alpha变换_01: Alpha变换<['λ', 'a', ['a']], 'c'> = ['λ', 'c', ['c']]
@@ -47,7 +47,7 @@ var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['a']]], 'c'> = [
 export type Beta规约<值 extends Lambda项> = 值 extends ['LL', ['λ', infer V, infer E], infer E2]
     ? 数组包含<替换<E, V, E2>, 计算自由变量<E2>> extends true
         ? 替换<E, V, E2>
-        : "E'的自由变量在E[V:=E']必须也是自由变量."
+        : "E'的自由变量在E[V:=E']中必须也是自由变量."
     : "只有((λV.E) E')形式的Lambda项能进行Beta规约."
 
 var 测试_Beta规约_01: Beta规约<['LL', ['λ', 'a', ['a']], ['b']]> = ['b']
