@@ -64,3 +64,7 @@ var 测试_Eta变换_02: Eta变换<['λ', 'a', ['LL', ['LL', ['a'], ['b']], ['a'
 type F = ['λ', 'a', ['a']]
 type G<A extends Lambda项> = Beta规约<['LL', A, ['1']]>
 type x = G<F> // 类型 x 是 ['1']
+
+export type 构造一类Lambda项<s extends string> = [s]
+export type 构造二类Lambda项<s extends string, l extends Lambda项> = [s, l]
+export type 构造三类Lambda项<l1 extends Lambda项, l2 extends Lambda项> = ['LL', l1, l2]

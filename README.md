@@ -176,6 +176,14 @@ export type Lambda项 = [string] | ['λ', string, Lambda项] | ['LL', Lambda项,
 
 分别对应`标识符`, `λx.t` 和 `t s`.
 
+因为构造过于麻烦, 提供了简单的构造函数:
+
+```typescript
+export type 构造一类Lambda项<s extends string> = [s]
+export type 构造二类Lambda项<s extends string, l extends Lambda项> = [s, l]
+export type 构造三类Lambda项<l1 extends Lambda项, l2 extends Lambda项> = ['LL', l1, l2]
+```
+
 ### Alpha 变换
 
 形式: `Alpha变换<Lambda项, 新变量名>`
