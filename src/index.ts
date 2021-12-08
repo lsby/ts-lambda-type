@@ -45,7 +45,7 @@ var 测试_Alpha变换_01: Alpha变换<['λ', 'a', ['a']], 'c'> = ['λ', 'c', ['
 var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['a']]], 'c'> = ['λ', 'c', ['λ', 'a', ['a']]]
 
 export type Beta规约<值 extends Lambda项> = 值 extends ['LL', ['λ', infer V, infer E], infer E2]
-    ? 数组包含<替换<E, V, E2>, 计算自由变量<E2>> extends true
+    ? 数组包含<计算自由变量<替换<E, V, E2>>, 计算自由变量<E2>> extends true
         ? 替换<E, V, E2>
         : "E'的自由变量在E[V:=E']中必须也是自由变量."
     : "只有((λV.E) E')形式的Lambda项能进行Beta规约."
