@@ -244,3 +244,17 @@ var 测试_Eta变换_02: Eta变换<['λ', 'a', ['LL', ['LL', ['S', 'a'], ['S', '
   ['S', 'b'],
 ]
 ```
+
+### Lambda 项转字符串
+
+为了方便观察, 提供了一个函数, 可以把 Lambda 项转换为字符串:
+
+```typescript
+var 测试_Lambda项转字符串_01: Lambda项转字符串<Lambda1<'a'>> = 'a'
+var 测试_Lambda项转字符串_02: Lambda项转字符串<Lambda2<'a', Lambda1<'a'>>> = 'λa.a'
+var 测试_Lambda项转字符串_03: Lambda项转字符串<Lambda3<Lambda1<'a'>, Lambda1<'b'>>> = '(a b)'
+var 测试_Lambda项转字符串_04: Lambda项转字符串<Lambda3<Lambda2<'a', Lambda1<'a'>>, Lambda1<'b'>>> =
+  '(λa.a b)'
+var 测试_Lambda项转字符串_05: Lambda项转字符串<Lambda3<Lambda2<'a', Lambda1<'b'>>, Lambda1<'a'>>> =
+  '(λa.b a)'
+```

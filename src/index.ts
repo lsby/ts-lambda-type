@@ -11,7 +11,9 @@ export type Lambda3<l1 extends Lambda项, l2 extends Lambda项> = ['LL', l1, l2]
 
 type 计算自由变量<值> = 值 extends Lambda项
     ? 值 extends ['S', infer 字符串]
-        ? [字符串]
+        ? 字符串 extends string
+            ? [字符串]
+            : never
         : 值 extends ['λ', infer 泛型, infer 子值]
         ? 删除数组指定内容<计算自由变量<子值>, 泛型>
         : 值 extends ['LL', infer 前键, infer 后键]
@@ -97,3 +99,31 @@ var 测试_Eta变换_02: Eta变换<['λ', 'a', ['LL', ['LL', ['S', 'a'], ['S', '
 type F = Lambda2<'a', Lambda1<'a'>> //['λ', 'a', ['a']]
 type G<A extends Lambda项> = Beta规约<Lambda3<A, Lambda1<'1'>>>
 type x = G<F>[1] // 类型 x 是 '1'
+
+export type Lambda项转字符串<值 extends Lambda项> = 值 extends Lambda1<infer s>
+    ? `${s}`
+    : 值 extends Lambda2<infer s, infer l>
+    ? Lambda项转字符串<l> extends infer r
+        ? r extends string
+            ? `λ${s}.${r}`
+            : never
+        : never
+    : 值 extends Lambda3<infer l1, infer l2>
+    ? Lambda项转字符串<l1> extends infer r1
+        ? Lambda项转字符串<l2> extends infer r2
+            ? r1 extends string
+                ? r2 extends string
+                    ? `(${r1} ${r2})`
+                    : never
+                : never
+            : never
+        : never
+    : never
+
+var 测试_Lambda项转字符串_01: Lambda项转字符串<Lambda1<'a'>> = 'a'
+var 测试_Lambda项转字符串_02: Lambda项转字符串<Lambda2<'a', Lambda1<'a'>>> = 'λa.a'
+var 测试_Lambda项转字符串_03: Lambda项转字符串<Lambda3<Lambda1<'a'>, Lambda1<'b'>>> = '(a b)'
+var 测试_Lambda项转字符串_04: Lambda项转字符串<Lambda3<Lambda2<'a', Lambda1<'a'>>, Lambda1<'b'>>> =
+    '(λa.a b)'
+var 测试_Lambda项转字符串_05: Lambda项转字符串<Lambda3<Lambda2<'a', Lambda1<'b'>>, Lambda1<'a'>>> =
+    '(λa.b a)'
