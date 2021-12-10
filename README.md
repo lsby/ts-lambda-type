@@ -161,9 +161,9 @@ type x = G<F>
 例如:
 
 ```typescript
-type F = ['λ', 'a', ['a']]
-type G<A extends Lambda项> = Beta规约<['LL', A, ['1']]>
-type x = G<F> // 类型 x 是 ['1']
+type F = Lambda2<'a', Lambda1<'a'>> //['λ', 'a', ['a']]
+type G<A extends Lambda项> = Beta规约<Lambda3<A, Lambda1<'1'>>>
+type x = G<F>[1] // 类型 x 是 '1'
 ```
 
 ## API
@@ -173,7 +173,7 @@ type x = G<F> // 类型 x 是 ['1']
 Lambda 项有三种形式:
 
 ```typescript
-export type Lambda项 = [string] | ['λ', string, Lambda项] | ['LL', Lambda项, Lambda项]
+export type Lambda项 = ['S', string] | ['λ', string, Lambda项] | ['LL', Lambda项, Lambda项]
 ```
 
 分别对应`标识符`, `λx.t` 和 `t s`.
@@ -181,7 +181,7 @@ export type Lambda项 = [string] | ['λ', string, Lambda项] | ['LL', Lambda项,
 因为构造过于麻烦, 提供了简单的构造函数:
 
 ```typescript
-export type Lambda1<s extends string> = [s]
+export type Lambda1<s extends string> = ['S', s]
 export type Lambda2<s extends string, l extends Lambda项> = ['λ', s, l]
 export type Lambda3<l1 extends Lambda项, l2 extends Lambda项> = ['LL', l1, l2]
 ```
@@ -200,8 +200,12 @@ export type Lambda3<l1 extends Lambda项, l2 extends Lambda项> = ['LL', l1, l2]
 示例:
 
 ```typescript
-var 测试_Alpha变换_01: Alpha变换<['λ', 'a', ['a']], 'c'> = ['λ', 'c', ['c']]
-var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['a']]], 'c'> = ['λ', 'c', ['λ', 'a', ['a']]]
+var 测试_Alpha变换_01: Alpha变换<['λ', 'a', ['S', 'a']], 'c'> = ['λ', 'c', ['S', 'c']]
+var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['S', 'a']]], 'c'> = [
+  'λ',
+  'c',
+  ['λ', 'a', ['S', 'a']],
+]
 ```
 
 ### Beta 规约
@@ -217,7 +221,7 @@ var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['a']]], 'c'> = [
 示例:
 
 ```typescript
-var 测试_Beta规约_01: Beta规约<['LL', ['λ', 'a', ['a']], ['b']]> = ['b']
+var 测试_Beta规约_01: Beta规约<['LL', ['λ', 'a', ['S', 'a']], ['S', 'b']]> = ['S', 'b']
 ```
 
 ### Eta 变换
@@ -233,6 +237,10 @@ var 测试_Beta规约_01: Beta规约<['LL', ['λ', 'a', ['a']], ['b']]> = ['b']
 示例:
 
 ```typescript
-var 测试_Eta变换_01: Eta变换<['λ', 'a', ['LL', ['b'], ['a']]]> = ['b']
-var 测试_Eta变换_02: Eta变换<['λ', 'a', ['LL', ['LL', ['a'], ['b']], ['a']]]> = ['LL', ['a'], ['b']]
+var 测试_Eta变换_01: Eta变换<['λ', 'a', ['LL', ['S', 'b'], ['S', 'a']]]> = ['S', 'b']
+var 测试_Eta变换_02: Eta变换<['λ', 'a', ['LL', ['LL', ['S', 'a'], ['S', 'b']], ['S', 'a']]]> = [
+  'LL',
+  ['S', 'a'],
+  ['S', 'b'],
+]
 ```
