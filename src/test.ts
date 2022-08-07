@@ -1,8 +1,31 @@
-import { Lambda调用 } from "./Lambda"
+import { Lambda1, Lambda2, Lambda3, Lambda调用 } from "./Lambda"
 import { Lambda转Ts } from "./LambdaToTs"
 import { Ts泛型转Lambda2, Ts类型转Lambda1 } from "./TsToLambda"
 
 type 类型EQ<A, B> = A extends B ? (B extends A ? true : false) : false
+
+var Lambda转Ts测试: 类型EQ<
+    Lambda转Ts<Lambda3<Lambda1<'Array'>, Lambda1<'number'>>>,
+    number[]
+> = true
+
+var Ts转Lambda测试1 : 类型EQ<
+    Ts类型转Lambda1<number>,
+    Lambda1<'number'>
+> = true
+
+var Ts转Lambda测试2 : 类型EQ<
+    Ts泛型转Lambda2<Array<number>>,
+    Lambda2<"A1", Lambda3<Lambda1<"Array">, Lambda1<"A1">>>
+> = true
+
+function 二阶类型测试_指定泛型<A, B, a = Ts泛型转Lambda2<A>, b = Ts类型转Lambda1<B>>(
+    a: Lambda转Ts<Lambda调用<a, b>>,
+) {}
+var 二阶类型测试_指定泛型_: 类型EQ<
+    Parameters<typeof 二阶类型测试_指定泛型<Array<any>, string>>,
+    [a: string[]]
+> = true
 
 function 二阶类型测试<A, B, a = Ts泛型转Lambda2<A>, b = Ts类型转Lambda1<B>>(
     a: A,
