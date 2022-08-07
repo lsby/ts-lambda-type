@@ -7,9 +7,10 @@ import {
     Beta规约,
     Eta变换,
     Lambda项转字符串,
+    Lambda调用,
 } from './Lambda'
-import { Lambda类型转换Ts类型, Lambda类型转中间类型 } from './LambdaToTs'
-import { Ts类型到Lambda类型 } from './TsToLambda'
+import { Lambda转Ts } from './LambdaToTs'
+import { Ts泛型转Lambda2, Ts类型转Lambda1 } from './TsToLambda'
 
 export {
     Lambda1,
@@ -20,13 +21,8 @@ export {
     Beta规约,
     Eta变换,
     Lambda项转字符串,
-    Lambda类型转换Ts类型,
-    Ts类型到Lambda类型,
+    Lambda调用,
+    Lambda转Ts,
+    Ts泛型转Lambda2,
+    Ts类型转Lambda1,
 }
-
-function f<A extends Array<any>, B>(
-    a: B,
-    b: Lambda类型转换Ts类型<Lambda3<Ts类型到Lambda类型<A>, Ts类型到Lambda类型<B>>>,
-) {}
-
-f(1)

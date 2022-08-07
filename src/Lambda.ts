@@ -7,7 +7,8 @@ export type Lambda项 = ['S', string] | ['λ', string, Lambda项] | ['LL', Lambd
 
 export type Lambda1<s extends string> = ['S', s]
 export type Lambda2<s extends string, l extends Lambda项> = ['λ', s, l]
-export type Lambda3<l1 extends Lambda项, l2 extends Lambda项> = ['LL', l1, l2]
+type 不安全的Lambda3<l1, l2> = ['LL', l1, l2]
+export type Lambda3<l1 extends Lambda项, l2 extends Lambda项> = 不安全的Lambda3<l1, l2>
 
 type 计算自由变量<值> = 值 extends Lambda项
     ? 值 extends ['S', infer 字符串]
@@ -75,11 +76,12 @@ var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['S', 'a']]], 'c'
     ['λ', 'a', ['S', 'a']],
 ]
 
-export type Beta规约<值 extends Lambda项> = 值 extends ['LL', ['λ', infer V, infer E], infer E2]
+type 不安全的Beta规约<值> = 值 extends ['LL', ['λ', infer V, infer E], infer E2]
     ? 数组包含<计算自由变量<替换<E, V, E2>>, 计算自由变量<E2>> extends true
         ? 替换<E, V, E2>
         : "E'的自由变量在E[V:=E']中必须也是自由变量."
     : "只有((λV.E) E')形式的Lambda项能进行Beta规约."
+export type Beta规约<值 extends Lambda项> = 不安全的Beta规约<值>
 
 var 测试_Beta规约_01: Beta规约<['LL', ['λ', 'a', ['S', 'a']], ['S', 'b']]> = ['S', 'b']
 
@@ -127,3 +129,5 @@ var 测试_Lambda项转字符串_04: Lambda项转字符串<Lambda3<Lambda2<'a', 
     '(λa.a b)'
 var 测试_Lambda项转字符串_05: Lambda项转字符串<Lambda3<Lambda2<'a', Lambda1<'b'>>, Lambda1<'a'>>> =
     '(λa.b a)'
+
+export type Lambda调用<A, B> = 不安全的Beta规约<不安全的Lambda3<A, B>>

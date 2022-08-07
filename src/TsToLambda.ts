@@ -303,22 +303,22 @@ type 查找九阶类型<A> = _查找九阶类型<
     联合转元组<keyof 九阶类型枚举<any, any, any, any, any, any, any, any>>
 >
 
-export type Ts类型到Lambda类型<A> = 查找一阶类型<A> extends Lambda项
-    ? 查找一阶类型<A>
-    : 查找二阶类型<A> extends Lambda项
+export type Ts类型转Lambda1<A> = 查找一阶类型<A> extends Lambda项 ? 查找一阶类型<A> : never
+
+export type Ts泛型转Lambda2<A> = 查找二阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找二阶类型<A>
-    : 查找三阶类型<A> extends Lambda项
+    : 查找三阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找三阶类型<A>
-    : 查找四阶类型<A> extends Lambda项
+    : 查找四阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找四阶类型<A>
-    : 查找五阶类型<A> extends Lambda项
+    : 查找五阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找五阶类型<A>
-    : 查找六阶类型<A> extends Lambda项
+    : 查找六阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找六阶类型<A>
-    : 查找七阶类型<A> extends Lambda项
+    : 查找七阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找七阶类型<A>
-    : 查找八阶类型<A> extends Lambda项
+    : 查找八阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找八阶类型<A>
-    : 查找九阶类型<A> extends Lambda项
+    : 查找九阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找九阶类型<A>
     : never
