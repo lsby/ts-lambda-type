@@ -3,102 +3,111 @@ import { 数组包含 } from './lib/数组包含'
 import { 数组去重 } from './lib/数组去重'
 import { 数组存在元素 } from './lib/数组存在元素'
 
-export type Lambda项 = ['S', string] | ['λ', string, Lambda项] | ['LL', Lambda项, Lambda项]
+const S: unique symbol = Symbol('S')
+const λ: unique symbol = Symbol('λ')
+const LL: unique symbol = Symbol('LL')
+type S_Type = typeof S
+type λ_Type = typeof λ
+type LL_Type = typeof LL
 
-export type Lambda1<s extends string> = ['S', s]
-export type Lambda2<s extends string, l extends Lambda项> = ['λ', s, l]
-type 不安全的Lambda3<l1, l2> = ['LL', l1, l2]
+export type Lambda项 = [S_Type, string] | [λ_Type, string, Lambda项] | [LL_Type, Lambda项, Lambda项]
+
+export type Lambda1<s extends string> = [S_Type, s]
+export type Lambda2<s extends string, l extends Lambda项> = [λ_Type, s, l]
+type 不安全的Lambda3<l1, l2> = [LL_Type, l1, l2]
 export type Lambda3<l1 extends Lambda项, l2 extends Lambda项> = 不安全的Lambda3<l1, l2>
 
 type 计算自由变量<值> = 值 extends Lambda项
-    ? 值 extends ['S', infer 字符串]
+    ? 值 extends [S_Type, infer 字符串]
         ? 字符串 extends string
             ? [字符串]
             : never
-        : 值 extends ['λ', infer 泛型, infer 子值]
+        : 值 extends [λ_Type, infer 泛型, infer 子值]
         ? 删除数组指定内容<计算自由变量<子值>, 泛型>
-        : 值 extends ['LL', infer 前键, infer 后键]
+        : 值 extends [LL_Type, infer 前键, infer 后键]
         ? 数组去重<[...计算自由变量<前键>, ...计算自由变量<后键>]>
         : never
     : never
 
-var 测试_计算自由变量_01: 计算自由变量<['S', 'a']> = ['a']
-var 测试_计算自由变量_02: 计算自由变量<['λ', 'a', ['S', 'a']]> = []
-var 测试_计算自由变量_03: 计算自由变量<['λ', 'a', Lambda3<Lambda1<'a'>, Lambda1<'b'>>]> = ['b']
+var 测试_计算自由变量_01: 计算自由变量<[S_Type, 'a']> = ['a']
+var 测试_计算自由变量_02: 计算自由变量<[λ_Type, 'a', [S_Type, 'a']]> = []
+var 测试_计算自由变量_03: 计算自由变量<[λ_Type, 'a', Lambda3<Lambda1<'a'>, Lambda1<'b'>>]> = ['b']
 var 测试_计算自由变量_04: 计算自由变量<Lambda3<Lambda1<'a'>, Lambda1<'b'>>> = ['a', 'b']
 var 测试_计算自由变量_05: 计算自由变量<Lambda3<Lambda2<'a', Lambda1<'b'>>, Lambda1<'b'>>> = ['b']
 
 type 替换<值, 绑定泛型, 绑定值> = 值 extends Lambda项
     ? 绑定值 extends Lambda项
-        ? 值 extends ['S', infer 字符串]
+        ? 值 extends [S_Type, infer 字符串]
             ? 字符串 extends 绑定泛型
                 ? 绑定值
                 : 值
-            : 值 extends ['LL', infer 前键, infer 后键]
-            ? ['LL', 替换<前键, 绑定泛型, 绑定值>, 替换<后键, 绑定泛型, 绑定值>]
-            : 值 extends ['λ', infer 泛型, infer 子值]
+            : 值 extends [LL_Type, infer 前键, infer 后键]
+            ? [LL_Type, 替换<前键, 绑定泛型, 绑定值>, 替换<后键, 绑定泛型, 绑定值>]
+            : 值 extends [λ_Type, infer 泛型, infer 子值]
             ? 泛型 extends 绑定泛型
                 ? 值
                 : 数组存在元素<计算自由变量<绑定值>, 泛型> extends true
                 ? 值
-                : ['λ', 泛型, 替换<子值, 绑定泛型, 绑定值>]
+                : [λ_Type, 泛型, 替换<子值, 绑定泛型, 绑定值>]
             : never
         : never
     : never
 
-var 测试_替换_01: 替换<['S', 'a'], 'a', Lambda1<'b'>> = ['S', 'b']
-var 测试_替换_02: 替换<['S', 'a'], 'b', Lambda1<'b'>> = ['S', 'a']
+var 测试_替换_01: 替换<[S_Type, 'a'], 'a', Lambda1<'b'>> = [S, 'b']
+var 测试_替换_02: 替换<[S_Type, 'a'], 'b', Lambda1<'b'>> = [S, 'a']
 var 测试_替换_03: 替换<Lambda3<Lambda1<'a'>, Lambda1<'b'>>, 'a', Lambda1<'b'>> = [
-    'LL',
-    ['S', 'b'],
-    ['S', 'b'],
+    LL,
+    [S, 'b'],
+    [S, 'b'],
 ]
 var 测试_替换_04: 替换<Lambda3<Lambda1<'a'>, Lambda1<'b'>>, 'b', Lambda1<'a'>> = [
-    'LL',
-    ['S', 'a'],
-    ['S', 'a'],
+    LL,
+    [S, 'a'],
+    [S, 'a'],
 ]
-var 测试_替换_05: 替换<Lambda2<'a', Lambda1<'a'>>, 'a', Lambda1<'b'>> = ['λ', 'a', ['S', 'a']]
-var 测试_替换_06: 替换<Lambda2<'a', Lambda1<'b'>>, 'b', Lambda1<'c'>> = ['λ', 'a', ['S', 'c']]
+var 测试_替换_05: 替换<Lambda2<'a', Lambda1<'a'>>, 'a', Lambda1<'b'>> = [λ, 'a', [S, 'a']]
+var 测试_替换_06: 替换<Lambda2<'a', Lambda1<'b'>>, 'b', Lambda1<'c'>> = [λ, 'a', [S, 'c']]
 
-export type Alpha变换<值 extends Lambda项, W extends string> = 值 extends ['λ', infer V, infer E]
+export type Alpha变换<值 extends Lambda项, W extends string> = 值 extends [λ_Type, infer V, infer E]
     ? 数组存在元素<计算自由变量<E>, W> extends true
         ? 'W不可以是E中的自由变量.'
         : 数组存在元素<计算自由变量<替换<E, V, W>>, W> extends true
-        ? ['λ', W, 替换<E, V, ['S', W]>]
+        ? [λ_Type, W, 替换<E, V, [S_Type, W]>]
         : 'E[V:=W]后, W不可以被E绑定.'
     : '只有λV.E形式的Lambda项能进行Alpha变换.'
 
-var 测试_Alpha变换_01: Alpha变换<['λ', 'a', ['S', 'a']], 'c'> = ['λ', 'c', ['S', 'c']]
-var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['S', 'a']]], 'c'> = [
-    'λ',
+var 测试_Alpha变换_01: Alpha变换<[λ_Type, 'a', [S_Type, 'a']], 'c'> = [λ, 'c', [S, 'c']]
+var 测试_Alpha变换_02: Alpha变换<[λ_Type, 'a', [λ_Type, 'a', [S_Type, 'a']]], 'c'> = [
+    λ,
     'c',
-    ['λ', 'a', ['S', 'a']],
+    [λ, 'a', [S, 'a']],
 ]
 
-type 不安全的Beta规约<值> = 值 extends ['LL', ['λ', infer V, infer E], infer E2]
+type 不安全的Beta规约<值> = 值 extends [LL_Type, [λ_Type, infer V, infer E], infer E2]
     ? 数组包含<计算自由变量<替换<E, V, E2>>, 计算自由变量<E2>> extends true
         ? 替换<E, V, E2>
         : "E'的自由变量在E[V:=E']中必须也是自由变量."
     : "只有((λV.E) E')形式的Lambda项能进行Beta规约."
 export type Beta规约<值 extends Lambda项> = 不安全的Beta规约<值>
 
-var 测试_Beta规约_01: Beta规约<['LL', ['λ', 'a', ['S', 'a']], ['S', 'b']]> = ['S', 'b']
+var 测试_Beta规约_01: Beta规约<[LL_Type, [λ_Type, 'a', [S_Type, 'a']], [S_Type, 'b']]> = [S, 'b']
 
-export type Eta变换<值 extends Lambda项> = 值 extends ['λ', infer X, ['LL', infer F, infer X2]]
-    ? X2 extends ['S', X]
+export type Eta变换<值 extends Lambda项> = 值 extends [
+    λ_Type,
+    infer X,
+    [LL_Type, infer F, infer X2],
+]
+    ? X2 extends [S_Type, X]
         ? F
         : "X'必须等于X."
     : "只有(λX.F X')形式的Lambda项能进行Eta变换."
 
-var 测试_Eta变换_01: Eta变换<['λ', 'a', ['LL', ['S', 'b'], ['S', 'a']]]> = ['S', 'b']
-var 测试_Eta变换_02: Eta变换<['λ', 'a', ['LL', ['LL', ['S', 'a'], ['S', 'b']], ['S', 'a']]]> = [
-    'LL',
-    ['S', 'a'],
-    ['S', 'b'],
-]
+var 测试_Eta变换_01: Eta变换<[λ_Type, 'a', [LL_Type, [S_Type, 'b'], [S_Type, 'a']]]> = [S, 'b']
+var 测试_Eta变换_02: Eta变换<
+    [λ_Type, 'a', [LL_Type, [LL_Type, [S_Type, 'a'], [S_Type, 'b']], [S_Type, 'a']]]
+> = [LL, [S, 'a'], [S, 'b']]
 
-type F = Lambda2<'a', Lambda1<'a'>> //['λ', 'a', ['a']]
+type F = Lambda2<'a', Lambda1<'a'>> //[λ_Type, 'a', ['a']]
 type G<A extends Lambda项> = Beta规约<Lambda3<A, Lambda1<'1'>>>
 type x = G<F>[1] // 类型 x 是 '1'
 

@@ -1,6 +1,7 @@
 import { Lambda1, Lambda2, Lambda3, Lambda调用 } from "./Lambda"
 import { Lambda转Ts } from "./LambdaToTs"
-import { Ts泛型转Lambda2, Ts类型转Lambda1 } from "./TsToLambda"
+import { Ts类型转Lambda1 } from "./TsToLambda1"
+import { Ts泛型转Lambda2 } from "./TsToLambda2"
 
 type 类型EQ<A, B> = A extends B ? (B extends A ? true : false) : false
 

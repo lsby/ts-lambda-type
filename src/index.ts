@@ -10,7 +10,8 @@ import {
     Lambda调用,
 } from './Lambda'
 import { Lambda转Ts } from './LambdaToTs'
-import { Ts泛型转Lambda2, Ts类型转Lambda1 } from './TsToLambda'
+import { Ts类型转Lambda1 } from './TsToLambda1'
+import { Ts泛型转Lambda2 } from './TsToLambda2'
 
 export {
     Lambda1,

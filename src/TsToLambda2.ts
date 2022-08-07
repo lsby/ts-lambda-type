@@ -1,27 +1,15 @@
 import { Lambda1, Lambda2, Lambda3, Lambda项 } from './Lambda'
 import { 联合转元组 } from './lib/联合转元组'
 import {
-    一阶类型枚举,
-    二阶类型枚举,
-    三阶类型枚举,
-    四阶类型枚举,
-    五阶类型枚举,
-    六阶类型枚举,
     七阶类型枚举,
-    八阶类型枚举,
+    三阶类型枚举,
     九阶类型枚举,
+    二阶类型枚举,
+    五阶类型枚举,
+    八阶类型枚举,
+    六阶类型枚举,
+    四阶类型枚举,
 } from './TypeEnum'
-
-type _查找一阶类型<A, arr> = arr extends []
-    ? unknown
-    : arr extends [infer a, ...infer as]
-    ? a extends keyof 一阶类型枚举
-        ? A extends 一阶类型枚举[a]
-            ? Lambda1<a>
-            : _查找一阶类型<A, as>
-        : unknown
-    : unknown
-type 查找一阶类型<A> = _查找一阶类型<A, 联合转元组<keyof 一阶类型枚举>>
 
 type _查找二阶类型<A, arr> = arr extends []
     ? unknown
@@ -302,8 +290,6 @@ type 查找九阶类型<A> = _查找九阶类型<
     A,
     联合转元组<keyof 九阶类型枚举<any, any, any, any, any, any, any, any>>
 >
-
-export type Ts类型转Lambda1<A> = 查找一阶类型<A> extends Lambda项 ? 查找一阶类型<A> : never
 
 export type Ts泛型转Lambda2<A> = 查找二阶类型<A> extends Lambda2<'A1', Lambda项>
     ? 查找二阶类型<A>

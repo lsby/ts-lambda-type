@@ -1,4 +1,4 @@
-import { Lambda1, Lambda3, Beta规约 } from './Lambda'
+import { Lambda1, Lambda3 } from './Lambda'
 import {
     一阶类型枚举,
     二阶类型枚举,
