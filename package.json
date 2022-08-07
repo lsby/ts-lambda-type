@@ -1,17 +1,14 @@
 {
     "name": "@lsby/ts_lambda_type",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "",
     "scripts": {
-        "clean": "gulp 清理一切",
-        "pub": "gulp 发布到npm"
+        "pub": "npm publish --access=public"
     },
     "author": "",
     "devDependencies": {
-        "@lsby/exec_cmd": "0.0.11",
-        "gulp": "^4.0.2",
         "prettier": "2.5.0",
-        "typescript": "^4.5.2"
+        "typescript": "^4.7.3"
     },
     "dependencies": {},
     "directories": {
