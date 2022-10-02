@@ -10,7 +10,10 @@
         "prettier": "2.5.0",
         "typescript": "^4.7.3"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@lsby/ts_type_fun": "^0.0.12",
+        "ts-lambda-calc": "github:desi-ivanov/ts-lambda-calc"
+    },
     "directories": {
         "test": "test"
     },

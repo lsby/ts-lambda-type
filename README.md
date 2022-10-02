@@ -146,8 +146,8 @@ var x = g(f) // 变量 x 的值是 '1'
 
 ```typescript
 type F<A> = A
-type G<A> = A<1> // 报错: A 不是泛型类型
-type x = G<F>
+type G<A> = A<number> // 报错: A 不是泛型类型
+type X = G<F>
 ```
 
 这是一个由来已久的需求, 但官方一直没有实现.
@@ -159,132 +159,85 @@ type x = G<F>
 例如:
 
 ```typescript
-type F = Lambda2<'a', Lambda1<'a'>> //['λ', 'a', ['a']]
-type G<A extends Lambda项> = Beta规约<Lambda3<A, Lambda1<'1'>>>
-type x = G<F>[1] // 类型 x 是 '1'
+type F = 'λa.a'
+type G = 调用<F, 'Number'>
+type X = 转换到ts类型<G> // number
 ```
 
 ## 用法
 
-### 测试
+这个库暴露一个函数:`转换到ts类型`.
 
-在开始之前, 先定义类型等级上的测试函数:
+你可以用这个函数将字符串形式的 λ 表达式转换为 typescript 的类型.
+
+### 简单类型
+
+简单类型只有三种: `Number`, `String`, `Boolean`.
 
 ```typescript
-type 类型EQ<A, B> = A extends B ? (B extends A ? true : false) : false
+type X = 转换到ts类型<'Number'> // number
 ```
 
-### 构造
+### 高阶类型
 
-在本库中 Lambda 项有三种形式:
+类似数组这样需要参数的类型, 我称为高阶类型.
+
+数组类型: `Array<A1>`, 需要一个参数, 我称为一阶类型, 以此类推:
 
 ```typescript
-export type Lambda项 = ['S', string] | ['λ', string, Lambda项] | ['LL', Lambda项, Lambda项]
+type X = 转换到ts类型<'Array Number'> // number[]
 ```
 
-分别对应`标识符`, `λx.t` 和 `(t s)`.
-
-因为构造过于麻烦, 提供了简单的构造函数:
+记录类型: `Record<A1, A2>`, 需要两个参数:
 
 ```typescript
-export type Lambda1<s extends string> = ['S', s]
-export type Lambda2<s extends string, l extends Lambda项> = ['λ', s, l]
-export type Lambda3<l1 extends Lambda项, l2 extends Lambda项> = ['LL', l1, l2]
+type X = 转换到ts类型<'Record String Number'> // Record<string, number>
 ```
 
-### 计算
-
-本库提供了三种 Lambda 计算:
+函数类型: `Function<A1, A2>`, 也需要两个参数:
 
 ```typescript
-var 测试_Alpha变换_01: Alpha变换<['λ', 'a', ['a']], 'c'> = ['λ', 'c', ['c']]
-var 测试_Alpha变换_02: Alpha变换<['λ', 'a', ['λ', 'a', ['a']]], 'c'> = ['λ', 'c', ['λ', 'a', ['a']]]
+type X = 转换到ts类型<'Function String Number'> // (a: string) => number
+```
+
+另外支持函数类型的语法糖:
+
+```typescript
+type X = 转换到ts类型<'String -> Number'> // (a: string) => number
+```
+
+### 自定义类型
+
+系统只内置了上面这些类型, 当你需要自己创建类型时, 你只需要扩充 interface 即可.
+
+```typescript
+type Maybe<A> = ['Just', A]
+
+declare module '@lsby/ts_lambda_type' {
+  interface 一阶类型<A1> {
+    Maybe: Maybe<A1>
+  }
+}
+
+type X = 转换到ts类型<'Maybe Number'> // ['Just', number]
+```
+
+### 类型计算
+
+你可以通过编写 λ 表达式定义自己的抽象类型.
+
+```typescript
+type X = 转换到ts类型<'(λx.Array x) Number'> // number[]
 ```
 
 ```typescript
-var 测试_Beta规约_01: Beta规约<['LL', ['λ', 'a', ['a']], ['b']]> = ['b']
+type F<A extends string> = 转换到ts类型<`(λx.Array x) ${A}`>
+type X = F<'Number'> // number[]
 ```
 
-```typescript
-var 测试_Eta变换_01: Eta变换<['λ', 'a', ['LL', ['b'], ['a']]]> = ['b']
-var 测试_Eta变换_02: Eta变换<['λ', 'a', ['LL', ['LL', ['a'], ['b']], ['a']]]> = ['LL', ['a'], ['b']]
-```
-
-### 与 typescript 类型互转
-
-可以将 Lambda 项转为 typescript 类型:
+这个写法不太方便, 库封装了一个简单函数`调用`:
 
 ```typescript
-var Lambda转Ts测试: 类型EQ<
-  Lambda转Ts<Lambda3<Lambda1<'Array'>, Lambda1<'number'>>>,
-  number[]
-> = true
-```
-
-也可以将 typescript 类型转换为 Lambda 项:
-
-- 对于非泛型参数, 应当将其转换为 Lambda1.
-- 对于泛型参数, 应当将其转换为 Lambda2.
-
-```typescript
-var Ts转Lambda测试1: 类型EQ<Ts类型转Lambda1<number>, Lambda1<'number'>> = true
-
-var Ts转Lambda测试2: 类型EQ<
-  Ts泛型转Lambda2<Array<number>>,
-  Lambda2<'A1', Lambda3<Lambda1<'Array'>, Lambda1<'A1'>>>
-> = true
-```
-
-要实现自定义类型的转换, 需要扩展 TypeEnum 文件里的 interface.
-
-### 应用
-
-在原生 typescript 中, 你不能这样写:
-
-```typescript
-type TT<A> = [A]
-function f<A, B>(a: A<B>) {}
-f<TT, number>([1, 2, 3])
-```
-
-问题在于, typescript 会认为 A 不是泛型类型, 所以不能写 `A<B>`.
-
-现在可以使用 Lambda 项:
-
-```typescript
-function 二阶类型测试_指定泛型<A, B, a = Ts泛型转Lambda2<A>, b = Ts类型转Lambda1<B>>(
-    a: Lambda转Ts<Lambda调用<a, b>>,
-) {}
-var 二阶类型测试_指定泛型_: 类型EQ<
-    Parameters<typeof 二阶类型测试_指定泛型<Array<any>, string>>,
-    [a: string[]]
-> = true
-```
-
-另外也允许通过传参来推断参数:
-
-```typescript
-function 二阶类型测试<A, B, a = Ts泛型转Lambda2<A>, b = Ts类型转Lambda1<B>>(
-    a: A,
-    b: B,
-    c: Lambda转Ts<Lambda调用<a, b>>,
-) {}
-var 二阶类型测试_: 类型EQ<
-    Parameters<typeof 二阶类型测试<Array<number>, string>>,
-    [a: number[], b: string, c: string[]]
-> = true
-```
-
-### Lambda 项转字符串
-
-为了方便观察, 提供了一个函数, 可以把 Lambda 项转换为字符串:
-
-```typescript
-var 测试_Lambda项转字符串_01: Lambda项转字符串<Lambda1<'a'>> = 'a'
-var 测试_Lambda项转字符串_02: Lambda项转字符串<Lambda2<'a', Lambda1<'a'>>> = 'λa.a'
-var 测试_Lambda项转字符串_03: Lambda项转字符串<Lambda3<Lambda1<'a'>, Lambda1<'b'>>> = '(a b)'
-var 测试_Lambda项转字符串_04: Lambda项转字符串<Lambda3<Lambda2<'a', Lambda1<'a'>>, Lambda1<'b'>>> =
-  '(λa.a b)'
-var 测试_Lambda项转字符串_05: Lambda项转字符串<Lambda3<Lambda2<'a', Lambda1<'b'>>, Lambda1<'a'>>> =
-  '(λa.b a)'
+type F<A extends string> = 转换到ts类型<调用<'λx.Array x', A>>
+type X = F<'Number'> // number[]
 ```
