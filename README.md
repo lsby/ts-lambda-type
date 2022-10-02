@@ -170,6 +170,8 @@ type X = 转换到ts类型<G> // number
 
 你可以用这个函数将字符串形式的 λ 表达式转换为 typescript 的类型.
 
+使用了[这个库](https://github.com/desi-ivanov/ts-lambda-calc)的 λ 演算实现, 我只在上面实现了一层 λ 表达式转换到 ts 的方案.
+
 ### 简单类型
 
 简单类型只有三种: `Number`, `String`, `Boolean`.
@@ -180,7 +182,7 @@ type X = 转换到ts类型<'Number'> // number
 
 ### 高阶类型
 
-类似数组这样需要参数的类型, 我称为高阶类型.
+类似`数组`这样需要参数的类型, 我称为高阶类型.
 
 数组类型: `Array<A1>`, 需要一个参数, 我称为一阶类型, 以此类推:
 
@@ -200,10 +202,11 @@ type X = 转换到ts类型<'Record String Number'> // Record<string, number>
 type X = 转换到ts类型<'Function String Number'> // (a: string) => number
 ```
 
-另外支持函数类型的语法糖:
+另外提供一个封装可以更方便的写函数:
 
 ```typescript
-type X = 转换到ts类型<'String -> Number'> // (a: string) => number
+// (a: Record<string, number>) => (a: number[]) => number[]
+type X = 转换到ts类型<F<['Record String Number', 'Array Number', 'Array Number']>>
 ```
 
 ### 自定义类型
@@ -235,9 +238,14 @@ type F<A extends string> = 转换到ts类型<`(λx.Array x) ${A}`>
 type X = F<'Number'> // number[]
 ```
 
-这个写法不太方便, 库封装了一个简单函数`调用`:
+这个写法不太方便, 所以封装了一个简单函数`调用`:
 
 ```typescript
 type F<A extends string> = 转换到ts类型<调用<'λx.Array x', A>>
 type X = F<'Number'> // number[]
 ```
+
+## TODO
+
+- ts 类型转 λ 表达式
+- 支持函数的箭头语法
