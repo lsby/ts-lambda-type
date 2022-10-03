@@ -168,6 +168,12 @@ type X = λ转ts<G> // number
 
 ## 用法
 
+先安装:
+
+```bash
+npm i @lsby/ts_lambda_type
+```
+
 ### ts 转 λ
 
 ```typescript
