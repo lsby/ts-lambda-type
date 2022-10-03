@@ -185,7 +185,7 @@ import { F, ts转λ, λ转ts, 取参数1, 取参数2, 取构造子, 调用 } fro
 ```typescript
 type X01 = ts转λ<number> // 'Number'
 type X02 = ts转λ<Array<number>> // '(Array Number)'
-type X03 = ts转λ<(a: number) => string> // '(Function Number String)'
+type X03 = ts转λ<(a: number) => Record<string, Array<number>>> // '(Function Number (Record String (Array Number)))'
 ```
 
 ### λ 转 ts
@@ -193,8 +193,12 @@ type X03 = ts转λ<(a: number) => string> // '(Function Number String)'
 ```typescript
 type X04 = λ转ts<'Number'> // number
 type X05 = λ转ts<'Array Number'> // number[]
-type X06 = λ转ts<'Function Number String'> // (a: number) => string
-// 另外提供一个方便的写函数的封装
+type X06 = λ转ts<'Function Number (Record String (Array Number))'> // (a: number) => Record<string, number[]>
+```
+
+另外提供一个方便的写函数的封装:
+
+```typescript
 type X07 = λ转ts<F<['Number', 'String', 'Number']>> // (a: number) => (a: string) => number
 ```
 
@@ -211,15 +215,25 @@ type X10 = 取构造子<(a: number) => Array<number>> // 'Function'
 ```typescript
 type X11 = 取参数1<Array<number>> // number
 type X12 = 取参数1<(a: number) => Array<number>> // number
-type X13 = 取参数2<(a: number) => Array<number>> // number[]
+type X13 = 取参数2<(a: number) => Array<Record<string, number>>> // Record<string, number>[]
 ```
 
 ### 自定义类型
 
-系统只内置了上面这些类型, 若要处理自己创建的类型, 则需要扩充接口.
+库内置了以下类型:
+
+- `number`
+- `string`
+- `boolean`
+- `Array<A1>`
+- `Record<A1, A2>`
+- `Function<A1, A2>`
+
+若要处理自己创建的类型, 则需要先扩充接口.
 
 ```typescript
 type Effect<A> = () => A
+
 declare module '@lsby/ts_lambda_type' {
   interface 一阶类型<A1> {
     Effect: Effect<A1>
