@@ -268,10 +268,7 @@ type X17 = F2<'Number'> // number[]
 有了这些工具, 就可以方便的编写复杂的类型计算了, 比如实现一个`map`:
 
 ```typescript
-function map<A, B, FA, F = λ转ts<调用<取构造子<FA>, ts转λ<A>>>>(
-  f: (a: A) => B,
-  x: FA,
-): λ转ts<调用<取构造子<FA>, ts转λ<B>>> {
+function map<A, B, FA, F = 取构造子<FA>>(f: (a: A) => B, x: FA): λ转ts<调用<F, ts转λ<B>>> {
   return 1 as any
 }
 
