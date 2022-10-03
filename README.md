@@ -271,11 +271,11 @@ type X17 = F2<'Number'> // number[]
 function map<A, B, FA, F = λ转ts<调用<取构造子<FA>, ts转λ<A>>>>(
   f: (a: A) => B,
   x: FA,
-): λ转ts<调用<F, ts转λ<B>>> {
+): λ转ts<调用<取构造子<FA>, ts转λ<B>>> {
   return 1 as any
 }
 
-map((a: number) => a + 1, [1, 2, 3])
+var x: string[] = map((a: number) => a.toString(), [1, 2, 3])
 ```
 
 ## 引用
