@@ -214,14 +214,13 @@ type X13 = 取参数2<(a: number) => Array<number>> // number[]
 
 ```typescript
 type Effect<A> = () => A
-
 declare module '@lsby/ts_lambda_type' {
   interface 一阶类型<A1> {
     Effect: Effect<A1>
   }
 }
 
-type X14 = 转换到ts类型<'Effect Number'> // () => A
+type X14 = λ转ts<'Effect Number'> // () => number
 ```
 
 ### 类型计算
