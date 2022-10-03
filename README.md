@@ -249,3 +249,7 @@ type X = F<'Number'> // number[]
 
 - ts 类型转 λ 表达式
 - 支持函数的箭头语法
+
+## 引用
+
+- https://github.com/desi-ivanov/ts-lambda-calc

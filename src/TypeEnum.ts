@@ -1,4 +1,4 @@
-import { error, 类型等价判定 } from '@lsby/ts_type_fun'
+import { error } from '@lsby/ts_type_fun'
 
 export interface 零阶类型 {
     Number: number
