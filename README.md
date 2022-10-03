@@ -174,6 +174,12 @@ type X = λ转ts<G> // number
 npm i @lsby/ts_lambda_type
 ```
 
+然后引入:
+
+```typescript
+import { F, ts转λ, λ转ts, 取参数1, 取参数2, 取构造子, 调用 } from '@lsby/ts_lambda_type'
+```
+
 ### ts 转 λ
 
 ```typescript
