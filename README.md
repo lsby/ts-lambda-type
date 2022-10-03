@@ -152,7 +152,9 @@ type X = G<F>
 
 这是一个由来已久的需求, 但官方一直没有实现.
 
-作为替代方案, 我写了这个库, 允许你在类型等级上进行 Lambda 演算.
+作为替代方案, 我写了这个库, 允许你在类型等级上进行 Lambda 演算, 并提供了方便的转换.
+
+使用了[这个库](https://github.com/desi-ivanov/ts-lambda-calc)的 λ 演算实现.
 
 当你需要高阶类型时, 用 Lambda 项替代 typescript 的内置类型, 当实际计算时, 再将 Lambda 项转换为 typescript 的内置类型.
 
@@ -161,68 +163,59 @@ type X = G<F>
 ```typescript
 type F = 'λa.a'
 type G = 调用<F, 'Number'>
-type X = 转换到ts类型<G> // number
+type X = λ转ts<G> // number
 ```
 
 ## 用法
 
-这个库暴露一个函数:`转换到ts类型`.
-
-你可以用这个函数将字符串形式的 λ 表达式转换为 typescript 的类型.
-
-使用了[这个库](https://github.com/desi-ivanov/ts-lambda-calc)的 λ 演算实现, 我只在上面实现了一层 λ 表达式转换到 ts 的方案.
-
-### 简单类型
-
-简单类型只有三种: `Number`, `String`, `Boolean`.
+### ts 转 λ
 
 ```typescript
-type X = 转换到ts类型<'Number'> // number
+type X01 = ts转λ<number> // 'Number'
+type X02 = ts转λ<Array<number>> // '(Array Number)'
+type X03 = ts转λ<(a: number) => string> // '(Function Number String)'
 ```
 
-### 高阶类型
-
-类似`数组`这样需要参数的类型, 我称为高阶类型.
-
-数组类型: `Array<A1>`, 需要一个参数, 我称为一阶类型, 以此类推:
+### λ 转 ts
 
 ```typescript
-type X = 转换到ts类型<'Array Number'> // number[]
+type X04 = λ转ts<'Number'> // number
+type X05 = λ转ts<'Array Number'> // number[]
+type X06 = λ转ts<'Function Number String'> // (a: number) => string
+// 另外提供一个方便的写函数的封装
+type X07 = λ转ts<F<['Number', 'String', 'Number']>> // (a: number) => (a: string) => number
 ```
 
-记录类型: `Record<A1, A2>`, 需要两个参数:
+### 取构造子
 
 ```typescript
-type X = 转换到ts类型<'Record String Number'> // Record<string, number>
+type X08 = 取构造子<number> // 'Number'
+type X09 = 取构造子<Array<number>> // 'Array'
+type X10 = 取构造子<(a: number) => Array<number>> // 'Function'
 ```
 
-函数类型: `Function<A1, A2>`, 也需要两个参数:
+### 取参数
 
 ```typescript
-type X = 转换到ts类型<'Function String Number'> // (a: string) => number
-```
-
-另外提供一个封装可以更方便的写函数:
-
-```typescript
-// (a: Record<string, number>) => (a: number[]) => number[]
-type X = 转换到ts类型<F<['Record String Number', 'Array Number', 'Array Number']>>
+type X11 = 取参数1<Array<number>> // number
+type X12 = 取参数1<(a: number) => Array<number>> // number
+type X13 = 取参数2<(a: number) => Array<number>> // number[]
 ```
 
 ### 自定义类型
 
-系统只内置了上面这些类型, 当你需要自己创建类型时, 你只需要扩充 interface 即可.
+系统只内置了上面这些类型, 若要处理自己创建的类型, 则需要扩充接口.
 
 ```typescript
-type Maybe<A> = ['Just', A]
+type Effect<A> = () => A
 
 declare module '@lsby/ts_lambda_type' {
   interface 一阶类型<A1> {
-    Maybe: Maybe<A1>
+    Effect: Effect<A1>
   }
 }
 
-type X = 转换到ts类型<'Maybe Number'> // ['Just', number]
+type X14 = 转换到ts类型<'Effect Number'> // () => A
 ```
 
 ### 类型计算
@@ -230,25 +223,35 @@ type X = 转换到ts类型<'Maybe Number'> // ['Just', number]
 你可以通过编写 λ 表达式定义自己的抽象类型.
 
 ```typescript
-type X = 转换到ts类型<'(λx.Array x) Number'> // number[]
+type X15 = λ转ts<'(λx.Array x) Number'> // number[]
 ```
 
 ```typescript
-type F<A extends string> = 转换到ts类型<`(λx.Array x) ${A}`>
-type X = F<'Number'> // number[]
+type F1<A extends string> = λ转ts<`(λx.Array x) ${A}`>
+type X16 = F1<'Number'> // number[]
 ```
 
-这个写法不太方便, 所以封装了一个简单函数`调用`:
+这个写法不太方便, 所以封装了`调用`操作:
 
 ```typescript
-type F<A extends string> = 转换到ts类型<调用<'λx.Array x', A>>
-type X = F<'Number'> // number[]
+type F2<A extends string> = λ转ts<调用<'λx.Array x', A>>
+type X17 = F2<'Number'> // number[]
 ```
 
-## TODO
+## 实例
 
-- ts 类型转 λ 表达式
-- 支持函数的箭头语法
+有了这些工具, 就可以方便的编写复杂的类型计算了, 比如实现一个`map`:
+
+```typescript
+function map<A, B, FA, F = λ转ts<调用<取构造子<FA>, ts转λ<A>>>>(
+  f: (a: A) => B,
+  x: FA,
+): λ转ts<调用<F, ts转λ<B>>> {
+  return 1 as any
+}
+
+map((a: number) => a + 1, [1, 2, 3])
+```
 
 ## 引用
 
