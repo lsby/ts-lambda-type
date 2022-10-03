@@ -14,7 +14,7 @@ import {
     零阶类型,
 } from './TypeEnum'
 import { 类型等价判定 } from '@lsby/ts_type_fun'
-import { 调用, F, 计算 } from './Lib'
+import { 调用, 函数, 计算 } from './Lib'
 
 export type _λ转ts<输入> = 输入 extends string
     ? 输入
@@ -191,29 +191,29 @@ var 函数测试04: 类型等价判定<
     λ转ts<'Function (Record String (Array Number)) (Function String Number)'>,
     (a: Record<string, number[]>) => (a: string) => number
 > = true
-var 函数测试05: 类型等价判定<λ转ts<F<['String', 'Number']>>, (a: string) => number> = true
+var 函数测试05: 类型等价判定<λ转ts<函数<['String', 'Number']>>, (a: string) => number> = true
 var 函数测试06: 类型等价判定<
-    λ转ts<F<['String', 'Number', 'Boolean']>>,
+    λ转ts<函数<['String', 'Number', 'Boolean']>>,
     (a: string) => (a: number) => boolean
 > = true
 var 函数测试07: 类型等价判定<
-    λ转ts<F<['String', 'Number', 'Boolean', 'Number']>>,
+    λ转ts<函数<['String', 'Number', 'Boolean', 'Number']>>,
     (a: string) => (a: number) => (a: boolean) => number
 > = true
 var 函数测试08: 类型等价判定<
-    λ转ts<F<['String', F<['Number', 'Boolean']>, ' Number']>>,
+    λ转ts<函数<['String', 函数<['Number', 'Boolean']>, ' Number']>>,
     (a: string) => (a: (a: number) => boolean) => number
 > = true
 var 函数测试09: 类型等价判定<
-    λ转ts<F<['Array Number', F<['Array Number', 'Boolean']>, 'Number']>>,
+    λ转ts<函数<['Array Number', 函数<['Array Number', 'Boolean']>, 'Number']>>,
     (a: number[]) => (a: (a: number[]) => boolean) => number
 > = true
 var 函数测试10: 类型等价判定<
-    λ转ts<F<['Record String Number', F<['Array Number', 'Boolean']>, 'Array Number']>>,
+    λ转ts<函数<['Record String Number', 函数<['Array Number', 'Boolean']>, 'Array Number']>>,
     (a: Record<string, number>) => (a: (a: number[]) => boolean) => number[]
 > = true
 var 函数测试11: 类型等价判定<
-    λ转ts<F<['Record String Number', 'Array Number', 'Array Number']>>,
+    λ转ts<函数<['Record String Number', 'Array Number', 'Array Number']>>,
     (a: Record<string, number>) => (a: number[]) => number[]
 > = true
 var 泛型测试01: 类型等价判定<λ转ts<'(λx.Array x) Number'>, number[]> = true

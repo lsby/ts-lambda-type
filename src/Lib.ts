@@ -8,10 +8,10 @@ export type 调用<a, b> = a extends string
         ? `((${a}) (${b}))`
         : error<['b不是字符串', b]>
     : error<['a不是字符串', a]>
-export type F<arr> = arr extends [infer a]
+export type 函数<arr> = arr extends [infer a]
     ? a
     : arr extends [infer a, ...infer tail]
     ? a extends string
-        ? `(Function (${a}) (${F<tail>}))`
+        ? `(Function (${a}) (${函数<tail>}))`
         : never
     : ''

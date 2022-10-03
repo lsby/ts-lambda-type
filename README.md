@@ -199,7 +199,7 @@ type X06 = λ转ts<'Function Number (Record String (Array Number))'> // (a: numb
 另外提供一个方便的写函数的封装:
 
 ```typescript
-type X07 = λ转ts<F<['Number', 'String', 'Number']>> // (a: number) => (a: string) => number
+type X07 = λ转ts<函数<['Number', 'String', 'Number']>> // (a: number) => (a: string) => number
 ```
 
 ### 取构造子
