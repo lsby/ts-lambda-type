@@ -1,6 +1,6 @@
 {
     "name": "@lsby/ts_lambda_type",
-    "version": "0.0.22",
+    "version": "0.0.23",
     "description": "",
     "scripts": {
         "pub": "npm publish --access=public"
