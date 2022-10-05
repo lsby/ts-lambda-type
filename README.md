@@ -218,6 +218,14 @@ type X12 = 取参数1<(a: number) => Array<number>> // number
 type X13 = 取参数2<(a: number) => Array<Record<string, number>>> // Record<string, number>[]
 ```
 
+也提供通用的版本:
+
+```typescript
+type X14 = 取参数<1> // []
+type X15 = 取参数<number[]> // [number]
+type X16 = 取参数<(a: number) => string> // [number, string]
+```
+
 ### 自定义类型
 
 库内置了以下类型:
@@ -240,7 +248,7 @@ declare module '@lsby/ts_lambda_type' {
   }
 }
 
-type X14 = λ转ts<'Effect Number'> // () => number
+type X17 = λ转ts<'Effect Number'> // () => number
 ```
 
 ### 类型计算
@@ -248,19 +256,19 @@ type X14 = λ转ts<'Effect Number'> // () => number
 你可以通过编写 λ 表达式定义自己的抽象类型.
 
 ```typescript
-type X15 = λ转ts<'(λx.Array x) Number'> // number[]
+type X18 = λ转ts<'(λx.Array x) Number'> // number[]
 ```
 
 ```typescript
 type F1<A extends string> = λ转ts<`(λx.Array x) ${A}`>
-type X16 = F1<'Number'> // number[]
+type X19 = F1<'Number'> // number[]
 ```
 
 这个写法不太方便, 所以封装了`调用`操作:
 
 ```typescript
 type F2<A extends string> = λ转ts<调用<'λx.Array x', A>>
-type X17 = F2<'Number'> // number[]
+type X20 = F2<'Number'> // number[]
 ```
 
 ## 实例

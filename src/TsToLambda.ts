@@ -225,6 +225,44 @@ export type 取参数7<输入> = _取参数7<计算<ts转λ<输入>>>
 export type 取参数8<输入> = _取参数8<计算<ts转λ<输入>>>
 export type 取参数9<输入> = _取参数9<计算<ts转λ<输入>>>
 
+export type 取参数<输入> = 取参数1<输入> extends infer a1
+    ? a1 extends error<any>
+        ? []
+        : 取参数2<输入> extends infer a2
+        ? a2 extends error<any>
+            ? [a1]
+            : 取参数3<输入> extends infer a3
+            ? a3 extends error<any>
+                ? [a1, a2]
+                : 取参数4<输入> extends infer a4
+                ? a4 extends error<any>
+                    ? [a1, a2, a3]
+                    : 取参数5<输入> extends infer a5
+                    ? a5 extends error<any>
+                        ? [a1, a2, a3, a4]
+                        : 取参数6<输入> extends infer a6
+                        ? a6 extends error<any>
+                            ? [a1, a2, a3, a4, a5]
+                            : 取参数7<输入> extends infer a7
+                            ? a7 extends error<any>
+                                ? [a1, a2, a3, a4, a5, a6]
+                                : 取参数8<输入> extends infer a8
+                                ? a8 extends error<any>
+                                    ? [a1, a2, a3, a4, a5, a6, a7]
+                                    : 取参数9<输入> extends infer a9
+                                    ? a9 extends error<any>
+                                        ? [a1, a2, a3, a4, a5, a6, a7, a8]
+                                        : [a1, a2, a3, a4, a5, a6, a7, a8, a9]
+                                    : never
+                                : never
+                            : never
+                        : never
+                    : never
+                : never
+            : never
+        : never
+    : never
+
 var 测试01: 类型等价判定<ts转λ<number>, 'Number'> = true
 var 测试02: 类型等价判定<ts转λ<Array<number>>, '(Array Number)'> = true
 var 测试03: 类型等价判定<ts转λ<(a: number) => string>, '(Function Number String)'> = true
@@ -248,3 +286,6 @@ var 测试11: 类型等价判定<取参数1<Array<number>>, number> = true
 var 测试11: 类型等价判定<取参数1<Array<(a: number) => string>>, (a: number) => string> = true
 var 测试12: 类型等价判定<取参数1<(a: number) => string>, number> = true
 var 测试13: 类型等价判定<取参数2<(a: number) => string>, string> = true
+var 测试14: 类型等价判定<取参数<1>, []> = true
+var 测试15: 类型等价判定<取参数<number[]>, [number]> = true
+var 测试16: 类型等价判定<取参数<(a: number) => string>, [number, string]> = true
