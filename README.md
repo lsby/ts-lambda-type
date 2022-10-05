@@ -161,8 +161,8 @@ type X = G<F>
 例如:
 
 ```typescript
-type F = 'λa.a'
-type G = 调用<F, 'Number'>
+type F = λ<'λa.a'>
+type G = 调用<F, λ<'Number'>>
 type X = λ转ts<G> // number
 ```
 
@@ -177,53 +177,48 @@ npm i @lsby/ts_lambda_type
 然后引入:
 
 ```typescript
-import { 函数, ts转λ, λ转ts, 取参数1, 取参数2, 取构造子, 调用 } from '@lsby/ts_lambda_type'
+import { λ, 函数, ts转λ, λ转ts, 取参数1, 取参数2, 取构造子, 调用 } from '@lsby/ts_lambda_type'
 ```
 
 ### ts 转 λ
 
 ```typescript
-type X01 = ts转λ<number> // 'Number'
-type X02 = ts转λ<Array<number>> // '(Array Number)'
-type X03 = ts转λ<(a: number) => Record<string, Array<number>>> // '(Function Number (Record String (Array Number)))'
+type X01 = ts转λ<number> // λ<'Number'>
+type X02 = ts转λ<Array<number>> // λ<'(Array Number)'>
+type X03 = ts转λ<(a: number) => Record<string, Array<number>>> // λ<'(Function Number (Record String (Array Number)))'>
 ```
 
 ### λ 转 ts
 
 ```typescript
-type X04 = λ转ts<'Number'> // number
-type X05 = λ转ts<'Array Number'> // number[]
-type X06 = λ转ts<'Function Number (Record String (Array Number))'> // (a: number) => Record<string, number[]>
+type X04 = λ转ts<λ<'Number'>> // number
+type X05 = λ转ts<λ<'Array Number'>> // number[]
+type X06 = λ转ts<λ<'Function Number (Record String (Array Number))'>> // (a: number) => Record<string, number[]>
 ```
 
 另外提供一个方便的写函数的封装:
 
 ```typescript
-type X07 = λ转ts<函数<['Number', 'String', 'Number']>> // (a: number) => (a: string) => number
+type X07 = λ转ts<函数<[λ<'Number'>, λ<'String'>, λ<'Number'>]>> // (a: number) => (a: string) => number
 ```
 
 ### 取构造子
 
 ```typescript
-type X08 = 取构造子<number> // 'Number'
-type X09 = 取构造子<Array<number>> // 'Array'
-type X10 = 取构造子<(a: number) => Array<number>> // 'Function'
+type X08 = 取构造子<number> // λ<'Number'>
+type X09 = 取构造子<Array<number>> // λ<'Array'>
+type X10 = 取构造子<(a: number) => Array<number>> // λ<'Function'>
 ```
 
 ### 取参数
 
 ```typescript
-type X11 = 取参数1<Array<number>> // number
-type X12 = 取参数1<(a: number) => Array<number>> // number
-type X13 = 取参数2<(a: number) => Array<Record<string, number>>> // Record<string, number>[]
-```
-
-也提供通用的版本:
-
-```typescript
-type X14 = 取参数<1> // []
-type X15 = 取参数<number[]> // [number]
-type X16 = 取参数<(a: number) => string> // [number, string]
+type X11 = 取参数<1> // []
+type X12 = 取参数<'a'> // []
+type X13 = 取参数<true> // []
+type X14 = 取参数<number[]> // [number]
+type X15 = 取参数<(a: number) => string> // [number, string]
+type X16 = 取参数<(a: number[]) => string> // [number[], string]
 ```
 
 ### 自定义类型
@@ -242,13 +237,13 @@ type X16 = 取参数<(a: number) => string> // [number, string]
 ```typescript
 type Effect<A> = () => A
 
-declare module '@lsby/ts_lambda_type' {
+declare module './TypeEnum' {
   interface 一阶类型<A1> {
     Effect: Effect<A1>
   }
 }
 
-type X17 = λ转ts<'Effect Number'> // () => number
+type X17 = λ转ts<λ<'Effect Number'>> // () => number
 ```
 
 ### 类型计算
@@ -256,19 +251,19 @@ type X17 = λ转ts<'Effect Number'> // () => number
 你可以通过编写 λ 表达式定义自己的抽象类型.
 
 ```typescript
-type X18 = λ转ts<'(λx.Array x) Number'> // number[]
+type X18 = λ转ts<λ<'(λx.Array x) Number'>> // number[]
 ```
 
 ```typescript
-type F1<A extends string> = λ转ts<`(λx.Array x) ${A}`>
+type F1<A extends string> = λ转ts<λ<`(λx.Array x) ${A}`>>
 type X19 = F1<'Number'> // number[]
 ```
 
 这个写法不太方便, 所以封装了`调用`操作:
 
 ```typescript
-type F2<A extends string> = λ转ts<调用<'λx.Array x', A>>
-type X20 = F2<'Number'> // number[]
+type F2<A extends λ<string>> = λ转ts<调用<λ<'λx.Array x'>, A>>
+type X20 = F2<λ<'Number'>> // number[]
 ```
 
 ## 实例

@@ -14,7 +14,7 @@ import {
     零阶类型,
 } from './TypeEnum'
 import { 类型等价判定 } from '@lsby/ts_type_fun'
-import { 调用, 函数, 计算 } from './Lib'
+import { 调用, 函数, 计算, λ } from './Lib'
 
 export type _λ转ts<输入> = 输入 extends string
     ? 输入
@@ -166,59 +166,63 @@ export type _λ转ts<输入> = 输入 extends string
     : error<['无法匹配输入', 输入]>
 export type λ转ts<输入> = _λ转ts<计算<输入>>
 
-var 零阶类型测试01: 类型等价判定<λ转ts<'Number'>, number> = true
-var 一阶类型测试01: 类型等价判定<λ转ts<'Array Number'>, number[]> = true
-var 一阶类型测试02: 类型等价判定<λ转ts<'Array (Array Number)'>, number[][]> = true
-var 二阶类型测试01: 类型等价判定<λ转ts<'Record String Number'>, Record<string, number>> = true
+var 零阶类型测试01: 类型等价判定<λ转ts<λ<'Number'>>, number> = true
+var 一阶类型测试01: 类型等价判定<λ转ts<λ<'Array Number'>>, number[]> = true
+var 一阶类型测试02: 类型等价判定<λ转ts<λ<'Array (Array Number)'>>, number[][]> = true
+var 二阶类型测试01: 类型等价判定<λ转ts<λ<'Record String Number'>>, Record<string, number>> = true
 var 二阶类型测试02: 类型等价判定<
-    λ转ts<'Record Boolean Number'>,
+    λ转ts<λ<'Record Boolean Number'>>,
     error<['key必须是string|number|symbol', false]> | error<['key必须是string|number|symbol', true]>
 > = true
 var 二阶类型测试03: 类型等价判定<
-    λ转ts<'Record String (Array Number)'>,
+    λ转ts<λ<'Record String (Array Number)'>>,
     Record<string, number[]>
 > = true
-var 函数测试01: 类型等价判定<λ转ts<'Function String Number'>, (a: string) => number> = true
+var 函数测试01: 类型等价判定<λ转ts<λ<'Function String Number'>>, (a: string) => number> = true
 var 函数测试02: 类型等价判定<
-    λ转ts<'Function String (Array Number)'>,
+    λ转ts<λ<'Function String (Array Number)'>>,
     (a: string) => number[]
 > = true
 var 函数测试03: 类型等价判定<
-    λ转ts<'Function (Record String (Array Number)) (Array Number)'>,
+    λ转ts<λ<'Function (Record String (Array Number)) (Array Number)'>>,
     (a: Record<string, number[]>) => number[]
 > = true
 var 函数测试04: 类型等价判定<
-    λ转ts<'Function (Record String (Array Number)) (Function String Number)'>,
+    λ转ts<λ<'Function (Record String (Array Number)) (Function String Number)'>>,
     (a: Record<string, number[]>) => (a: string) => number
 > = true
-var 函数测试05: 类型等价判定<λ转ts<函数<['String', 'Number']>>, (a: string) => number> = true
+var 函数测试05: 类型等价判定<λ转ts<函数<[λ<'String'>, λ<'Number'>]>>, (a: string) => number> = true
 var 函数测试06: 类型等价判定<
-    λ转ts<函数<['String', 'Number', 'Boolean']>>,
+    λ转ts<函数<[λ<'String'>, λ<'Number'>, λ<'Boolean'>]>>,
     (a: string) => (a: number) => boolean
 > = true
 var 函数测试07: 类型等价判定<
-    λ转ts<函数<['String', 'Number', 'Boolean', 'Number']>>,
+    λ转ts<函数<[λ<'String'>, λ<'Number'>, λ<'Boolean'>, λ<'Number'>]>>,
     (a: string) => (a: number) => (a: boolean) => number
 > = true
 var 函数测试08: 类型等价判定<
-    λ转ts<函数<['String', 函数<['Number', 'Boolean']>, ' Number']>>,
+    λ转ts<函数<[λ<'String'>, 函数<[λ<'Number'>, λ<'Boolean'>]>, λ<'Number'>]>>,
     (a: string) => (a: (a: number) => boolean) => number
 > = true
 var 函数测试09: 类型等价判定<
-    λ转ts<函数<['Array Number', 函数<['Array Number', 'Boolean']>, 'Number']>>,
+    λ转ts<函数<[λ<'Array Number'>, 函数<[λ<'Array Number'>, λ<'Boolean'>]>, λ<'Number'>]>>,
     (a: number[]) => (a: (a: number[]) => boolean) => number
 > = true
 var 函数测试10: 类型等价判定<
-    λ转ts<函数<['Record String Number', 函数<['Array Number', 'Boolean']>, 'Array Number']>>,
+    λ转ts<
+        函数<
+            [λ<'Record String Number'>, 函数<[λ<'Array Number'>, λ<'Boolean'>]>, λ<'Array Number'>]
+        >
+    >,
     (a: Record<string, number>) => (a: (a: number[]) => boolean) => number[]
 > = true
 var 函数测试11: 类型等价判定<
-    λ转ts<函数<['Record String Number', 'Array Number', 'Array Number']>>,
+    λ转ts<函数<[λ<'Record String Number'>, λ<'Array Number'>, λ<'Array Number'>]>>,
     (a: Record<string, number>) => (a: number[]) => number[]
 > = true
-var 泛型测试01: 类型等价判定<λ转ts<'(λx.Array x) Number'>, number[]> = true
-var 泛型测试02: 类型等价判定<λ转ts<调用<'λx.Array x', 'Number'>>, number[]> = true
+var 泛型测试01: 类型等价判定<λ转ts<λ<'(λx.Array x) Number'>>, number[]> = true
+var 泛型测试02: 类型等价判定<λ转ts<调用<λ<'λx.Array x'>, λ<'Number'>>>, number[]> = true
 var 泛型测试03: 类型等价判定<
-    λ转ts<调用<调用<'λx.λy.Record x y', 'Number'>, 'String'>>,
+    λ转ts<调用<调用<λ<'λx.λy.Record x y'>, λ<'Number'>>, λ<'String'>>>,
     Record<number, string>
 > = true
