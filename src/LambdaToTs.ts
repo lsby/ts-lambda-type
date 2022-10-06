@@ -2,15 +2,25 @@ import { App, Func, Var } from 'ts-lambda-calc/Lang'
 
 import {
     一阶类型,
+    一阶类型key,
     七阶类型,
+    七阶类型key,
     三阶类型,
+    三阶类型key,
     九阶类型,
+    九阶类型key,
     二阶类型,
+    二阶类型key,
     五阶类型,
+    五阶类型key,
     八阶类型,
+    八阶类型key,
     六阶类型,
+    六阶类型key,
     四阶类型,
+    四阶类型key,
     零阶类型,
+    零阶类型key,
 } from './TypeEnum'
 import { 等于, 错误 } from '@lsby/ts_type_fun'
 import { 调用, 函数, 计算, λ } from './Lib'
@@ -18,33 +28,33 @@ import { 调用, 函数, 计算, λ } from './Lib'
 export type _λ转ts<输入> = 输入 extends string
     ? 输入
     : 输入 extends Var<infer k>
-    ? k extends keyof 零阶类型
+    ? k extends 零阶类型key
         ? 零阶类型[k]
         : 错误<['零阶类型中没有找到key', k]>
     : 输入 extends App<Var<infer 构造子>, infer 参数1>
-    ? 构造子 extends keyof 一阶类型<any>
+    ? 构造子 extends 一阶类型key
         ? 一阶类型<_λ转ts<参数1>>[构造子]
         : 错误<['一阶类型中没有找到key', 构造子]>
     : 输入 extends App<App<Var<infer 构造子>, infer 参数1>, infer 参数2>
-    ? 构造子 extends keyof 二阶类型<any, any>
+    ? 构造子 extends 二阶类型key
         ? 二阶类型<_λ转ts<参数1>, _λ转ts<参数2>>[构造子]
         : 错误<['二阶类型中没有找到key', 构造子]>
     : 输入 extends App<App<App<Var<infer 构造子>, infer 参数1>, infer 参数2>, infer 参数3>
-    ? 构造子 extends keyof 三阶类型<any, any, any>
+    ? 构造子 extends 三阶类型key
         ? 三阶类型<_λ转ts<参数1>, _λ转ts<参数2>, _λ转ts<参数3>>[构造子]
         : 错误<['三阶类型中没有找到key', 构造子]>
     : 输入 extends App<
           App<App<App<Var<infer 构造子>, infer 参数1>, infer 参数2>, infer 参数3>,
           infer 参数4
       >
-    ? 构造子 extends keyof 四阶类型<any, any, any, any>
+    ? 构造子 extends 四阶类型key
         ? 四阶类型<_λ转ts<参数1>, _λ转ts<参数2>, _λ转ts<参数3>, _λ转ts<参数4>>[构造子]
         : 错误<['四阶类型中没有找到key', 构造子]>
     : 输入 extends App<
           App<App<App<App<Var<infer 构造子>, infer 参数1>, infer 参数2>, infer 参数3>, infer 参数4>,
           infer 参数5
       >
-    ? 构造子 extends keyof 五阶类型<any, any, any, any, any>
+    ? 构造子 extends 五阶类型key
         ? 五阶类型<
               _λ转ts<参数1>,
               _λ转ts<参数2>,
@@ -63,7 +73,7 @@ export type _λ转ts<输入> = 输入 extends string
           >,
           infer 参数6
       >
-    ? 构造子 extends keyof 六阶类型<any, any, any, any, any, any>
+    ? 构造子 extends 六阶类型key
         ? 六阶类型<
               _λ转ts<参数1>,
               _λ转ts<参数2>,
@@ -86,7 +96,7 @@ export type _λ转ts<输入> = 输入 extends string
           >,
           infer 参数7
       >
-    ? 构造子 extends keyof 七阶类型<any, any, any, any, any, any, any>
+    ? 构造子 extends 七阶类型key
         ? 七阶类型<
               _λ转ts<参数1>,
               _λ转ts<参数2>,
@@ -113,7 +123,7 @@ export type _λ转ts<输入> = 输入 extends string
           >,
           infer 参数8
       >
-    ? 构造子 extends keyof 八阶类型<any, any, any, any, any, any, any, any>
+    ? 构造子 extends 八阶类型key
         ? 八阶类型<
               _λ转ts<参数1>,
               _λ转ts<参数2>,
@@ -147,7 +157,7 @@ export type _λ转ts<输入> = 输入 extends string
           >,
           infer 参数9
       >
-    ? 构造子 extends keyof 九阶类型<any, any, any, any, any, any, any, any, any>
+    ? 构造子 extends 九阶类型key
         ? 九阶类型<
               _λ转ts<参数1>,
               _λ转ts<参数2>,

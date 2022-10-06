@@ -1,70 +1,81 @@
-import { 等于, 错误, 取对象键们 } from '@lsby/ts_type_fun'
+import { 等于, 错误 } from '@lsby/ts_type_fun'
 import { App, Var } from 'ts-lambda-calc/Lang'
 import { _λ转ts } from './LambdaToTs'
 import { λ, λ解包, 计算 } from './Lib'
 import {
     一阶类型,
+    一阶类型key,
+    一阶类型key元组,
     七阶类型,
+    七阶类型key,
+    七阶类型key元组,
     三阶类型,
+    三阶类型key,
+    三阶类型key元组,
     九阶类型,
+    九阶类型key,
+    九阶类型key元组,
     二阶类型,
+    二阶类型key,
+    二阶类型key元组,
     五阶类型,
+    五阶类型key,
+    五阶类型key元组,
     八阶类型,
+    八阶类型key,
+    八阶类型key元组,
     六阶类型,
+    六阶类型key,
+    六阶类型key元组,
     四阶类型,
+    四阶类型key,
+    四阶类型key元组,
     零阶类型,
+    零阶类型key,
+    零阶类型key元组,
 } from './TypeEnum'
 
 // ts转λ表达式
-type 零阶类型判定<输入, arr extends any[] = 取对象键们<零阶类型>> = arr['length'] extends 0
+type 零阶类型判定<输入, arr extends any[] = 零阶类型key元组> = arr['length'] extends 0
     ? 一阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 零阶类型
+    ? key extends 零阶类型key
         ? 输入 extends 零阶类型[key]
             ? λ<key>
             : 零阶类型判定<输入, tail>
         : never
     : never
-type 一阶类型判定<输入, arr extends any[] = 取对象键们<一阶类型<any>>> = arr['length'] extends 0
+type 一阶类型判定<输入, arr extends any[] = 一阶类型key元组> = arr['length'] extends 0
     ? 二阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 一阶类型<any>
+    ? key extends 一阶类型key
         ? 输入 extends 一阶类型<infer T1>[key]
             ? λ<`(${key} ${λ解包<ts转λ<T1>>})`>
             : 一阶类型判定<输入, tail>
         : never
     : never
-type 二阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<二阶类型<any, any>>,
-> = arr['length'] extends 0
+type 二阶类型判定<输入, arr extends any[] = 二阶类型key元组> = arr['length'] extends 0
     ? 三阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 二阶类型<any, any>
+    ? key extends 二阶类型key
         ? 输入 extends 二阶类型<infer T1, infer T2>[key]
             ? λ<`(${key} ${λ解包<ts转λ<T1>>} ${λ解包<ts转λ<T2>>})`>
             : 二阶类型判定<输入, tail>
         : never
     : never
-type 三阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<三阶类型<any, any, any>>,
-> = arr['length'] extends 0
+type 三阶类型判定<输入, arr extends any[] = 三阶类型key元组> = arr['length'] extends 0
     ? 四阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 三阶类型<any, any, any>
+    ? key extends 三阶类型key
         ? 输入 extends 三阶类型<infer T1, infer T2, infer T3>[key]
             ? λ<`(${key} ${λ解包<ts转λ<T1>>} ${λ解包<ts转λ<T2>>} ${λ解包<ts转λ<T3>>})`>
             : 三阶类型判定<输入, tail>
         : never
     : never
-type 四阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<四阶类型<any, any, any, any>>,
-> = arr['length'] extends 0
+type 四阶类型判定<输入, arr extends any[] = 四阶类型key元组> = arr['length'] extends 0
     ? 五阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 四阶类型<any, any, any, any>
+    ? key extends 四阶类型key
         ? 输入 extends 四阶类型<infer T1, infer T2, infer T3, infer T4>[key]
             ? λ<`(${key} ${λ解包<ts转λ<T1>>} ${λ解包<ts转λ<T2>>} ${λ解包<ts转λ<T3>>} ${λ解包<
                   ts转λ<T4>
@@ -72,13 +83,10 @@ type 四阶类型判定<
             : 四阶类型判定<输入, tail>
         : never
     : never
-type 五阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<五阶类型<any, any, any, any, any>>,
-> = arr['length'] extends 0
+type 五阶类型判定<输入, arr extends any[] = 五阶类型key元组> = arr['length'] extends 0
     ? 六阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 五阶类型<any, any, any, any, any>
+    ? key extends 五阶类型key
         ? 输入 extends 五阶类型<infer T1, infer T2, infer T3, infer T4, infer T5>[key]
             ? λ<`(${key} ${λ解包<ts转λ<T1>>} ${λ解包<ts转λ<T2>>} ${λ解包<ts转λ<T3>>} ${λ解包<
                   ts转λ<T4>
@@ -86,13 +94,10 @@ type 五阶类型判定<
             : 五阶类型判定<输入, tail>
         : never
     : never
-type 六阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<六阶类型<any, any, any, any, any, any>>,
-> = arr['length'] extends 0
+type 六阶类型判定<输入, arr extends any[] = 六阶类型key元组> = arr['length'] extends 0
     ? 七阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 六阶类型<any, any, any, any, any, any>
+    ? key extends 六阶类型key
         ? 输入 extends 六阶类型<infer T1, infer T2, infer T3, infer T4, infer T5, infer T6>[key]
             ? λ<`(${key} ${λ解包<ts转λ<T1>>} ${λ解包<ts转λ<T2>>} ${λ解包<ts转λ<T3>>} ${λ解包<
                   ts转λ<T4>
@@ -100,13 +105,10 @@ type 六阶类型判定<
             : 六阶类型判定<输入, tail>
         : never
     : never
-type 七阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<七阶类型<any, any, any, any, any, any, any>>,
-> = arr['length'] extends 0
+type 七阶类型判定<输入, arr extends any[] = 七阶类型key元组> = arr['length'] extends 0
     ? 八阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 七阶类型<any, any, any, any, any, any, any>
+    ? key extends 七阶类型key
         ? 输入 extends 七阶类型<
               infer T1,
               infer T2,
@@ -122,13 +124,10 @@ type 七阶类型判定<
             : 七阶类型判定<输入, tail>
         : never
     : never
-type 八阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<八阶类型<any, any, any, any, any, any, any, any>>,
-> = arr['length'] extends 0
+type 八阶类型判定<输入, arr extends any[] = 八阶类型key元组> = arr['length'] extends 0
     ? 九阶类型判定<输入>
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 八阶类型<any, any, any, any, any, any, any, any>
+    ? key extends 八阶类型key
         ? 输入 extends 八阶类型<
               infer T1,
               infer T2,
@@ -145,13 +144,10 @@ type 八阶类型判定<
             : 八阶类型判定<输入, tail>
         : never
     : never
-type 九阶类型判定<
-    输入,
-    arr extends any[] = 取对象键们<九阶类型<any, any, any, any, any, any, any, any, any>>,
-> = arr['length'] extends 0
+type 九阶类型判定<输入, arr extends any[] = 九阶类型key元组> = arr['length'] extends 0
     ? never
     : arr extends [infer key, ...infer tail]
-    ? key extends keyof 九阶类型<any, any, any, any, any, any, any, any, any>
+    ? key extends 九阶类型key
         ? 输入 extends 九阶类型<
               infer T1,
               infer T2,
