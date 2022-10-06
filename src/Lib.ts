@@ -1,4 +1,4 @@
-import { error } from '@lsby/ts_type_fun'
+import { 错误 } from '@lsby/ts_type_fun'
 import { Parse } from 'ts-lambda-calc/Parser'
 import { Eval } from 'ts-lambda-calc/Semantics'
 
@@ -6,8 +6,8 @@ export type 计算<a> = Eval<Parse<λ解包<a>>>
 export type 调用<a, b> = a extends λ<infer aa>
     ? b extends λ<infer bb>
         ? λ<`((${aa}) (${bb}))`>
-        : error<['b不是λ项', b]>
-    : error<['a不是λ项', a]>
+        : 错误<['b不是λ项', b]>
+    : 错误<['a不是λ项', a]>
 export type 函数<arr> = arr extends [infer a]
     ? a
     : arr extends [infer a, ...infer tail]
