@@ -167,7 +167,11 @@ type 九阶类型判定<输入, arr extends any[] = 九阶类型key元组> = arr
             : 九阶类型判定<输入, tail>
         : never
     : never
-export type ts转λ<输入> = 零阶类型判定<输入>
+export type ts转λ<输入> = 零阶类型判定<输入> extends infer r
+    ? [r] extends [never]
+        ? 错误<['转换失败', 输入]>
+        : r
+    : 错误<['解构失败', 输入]>
 
 // 取构造子
 type _取ts类型构造子<输入> = 输入 extends Var<infer s>
