@@ -1,4 +1,4 @@
-import { App, Func, Var } from 'ts-lambda-calc/Lang'
+import { App, Func, Var } from '@lsby/ts-lambda-calc/Lang'
 
 import {
     一阶类型,

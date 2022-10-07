@@ -1,6 +1,6 @@
 import { 错误 } from '@lsby/ts_type_fun'
-import { Parse } from 'ts-lambda-calc/Parser'
-import { Eval } from 'ts-lambda-calc/Semantics'
+import { Parse } from '@lsby/ts-lambda-calc/Parser'
+import { Eval } from '@lsby/ts-lambda-calc/Semantics'
 
 export type 计算<a> = Eval<Parse<λ解包<a>>>
 export type 调用<a, b> = a extends λ<infer aa>

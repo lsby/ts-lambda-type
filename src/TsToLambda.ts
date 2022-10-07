@@ -1,5 +1,5 @@
 import { 等于, 错误 } from '@lsby/ts_type_fun'
-import { App, Var } from 'ts-lambda-calc/Lang'
+import { App, Var } from '@lsby/ts-lambda-calc/Lang'
 import { _λ转ts } from './LambdaToTs'
 import { λ, λ解包, 计算 } from './Lib'
 import {
