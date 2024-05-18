@@ -1,4 +1,4 @@
-# ts_lambda_type
+# ts-lambda-type
 
 在类型等级上实现的 Lambda 演算
 
